@@ -1,14 +1,16 @@
 <?php
 /**
-  Plugin Name: WP Rich Recipes
-  Text Domain: wprichrecipes
-  Domain Path: /languages
-  Description: SEO friendly rich snippet recipes.
-  Author: Codeschubser.de
-  Author URI: https://codeschubser.de
-  Plugin URI: https://codeschubser.de/wprichrecipes
-  License: GPLv2 or later
-  Version: 1.2
+Plugin Name: WP Rich Recipes
+Description: SEO friendly rich snippet recipes.
+Author: Codeschubser.de
+Author URI: https://codeschubser.de
+Plugin URI: https://codeschubser.de/wprichrecipes
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.txt
+Version: 1.2
+Text Domain: wprichrecipes
+Domain Path: /languages
+GitHub Plugin URI: codeschubser/wp-rich-recipes
 */
 
 /* Sicherheitsabfrage */
