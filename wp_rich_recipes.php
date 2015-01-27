@@ -19,49 +19,19 @@ if (!class_exists('WP')) {
 }
 
 /**
- * Fired when activate the plugin.
+ * Make theme available for translation.
+ * Translations can be filed in the /languages/ directory.
+ * If you're building a plugin based on wprichrecipes, use a find and replace
+ * to change 'wprichrecipes' to the name of your theme in all the template files.
  *
  * @since WP Rich Recipes 1.4
  */
-function wprr_activate_plugin()
+function wprr_load_textdomain()
 {
-    if (!get_option('wprr_flush_rewrite_rules_flag')) {
-        add_option('wprr_flush_rewrite_rules_flag', true, '', 'no');
-    }
+    load_plugin_textdomain('wprichrecipes', false, dirname
+            (plugin_basename(__FILE__)) . '/languages');
 }
-register_activation_hook(__FILE__, 'wprr_activate_plugin');
-
-/**
- * Fired when deactivate the plugin.
- *
- * @since WP Rich Recipes 1.4
- */
-function wprr_deactivate_plugin()
-{
-    if (!get_option('wprr_flush_rewrite_rules_flag')) {
-        add_option('wprr_flush_rewrite_rules_flag', true, '', 'no');
-    }
-}
-register_deactivation_hook(__FILE__, 'wprr_deactivate_plugin');
-
-/**
- * Fired when uninstall the plugin.
- *
- * Delete options and optimize the database.
- *
- * @since WP Rich Recipes 1.4
- *
- * @global object $wpdb
- */
-function wprr_uninstall_plugin()
-{
-    /* Global */
-    global $wpdb;
-
-    /* Remove settings */
-    delete_option('wprr_flush_rewrite_rules_flag');
-}
-register_uninstall_hook(__FILE__, 'wprr_uninstall_plugin');
+add_action('plugins_loaded', 'wprr_load_textdomain');
 
 /**
  * Register a custom post type for recipes.
@@ -157,7 +127,7 @@ function wprr_register_taxonomy_ingredients()
     );
     register_taxonomy('ingredient', array('rich-recipe'), $args);
 }
-add_action('init', 'wprr_register_taxonomy_ingredients', 0);
+add_action('init', 'wprr_register_taxonomy_ingredients');
 
 /**
  * Register a custom taxonomy for recipe cuisine.
@@ -200,7 +170,7 @@ function wprr_register_taxonomy_cuisine()
     );
     register_taxonomy('cuisine', array('rich-recipe'), $args);
 }
-add_action('init', 'wprr_register_taxonomy_cuisine', 0);
+add_action('init', 'wprr_register_taxonomy_cuisine');
 
 /**
  * Add the custom post type to WordPress loop.
@@ -398,7 +368,8 @@ function wprr_recipe_updated_messages($messages)
         8 => sprintf(__('Recipe submitted. <a target="_blank" href="%s">Preview recipe</a>',
                 'wprichrecipes'), esc_url(add_query_arg('preview', 'true', get_permalink($post_ID)))),
         9 => sprintf(__('Recipe scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview recipe</a>',
-                'wprichrecipes'), date_i18n(__('M j, Y @ G:i'), strtotime($post->post_date)),
+                'wprichrecipes'),
+            date_i18n(__('M j, Y @ G:i', 'wprichrecipes'), strtotime($post->post_date)),
             esc_url(get_permalink($post_ID))),
         10 => sprintf(__('Recipe draft updated. <a target="_blank" href="%s">Preview recipe</a>',
                 'wprichrecipes'), esc_url(add_query_arg('preview', 'true', get_permalink($post_ID)))),
@@ -510,3 +481,51 @@ function wprr_convert_times($time)
 
     return $time;
 }
+
+/**
+ * Fired when activate the plugin.
+ *
+ * @since WP Rich Recipes 1.4
+ */
+function wprr_activate_plugin()
+{
+    if (!get_option('wprr_flush_rewrite_rules_flag')) {
+        add_option('wprr_flush_rewrite_rules_flag', true, '', 'no');
+    }
+}
+
+register_activation_hook(__FILE__, 'wprr_activate_plugin');
+
+/**
+ * Fired when deactivate the plugin.
+ *
+ * @since WP Rich Recipes 1.4
+ */
+function wprr_deactivate_plugin()
+{
+    if (!get_option('wprr_flush_rewrite_rules_flag')) {
+        add_option('wprr_flush_rewrite_rules_flag', true, '', 'no');
+    }
+}
+
+register_deactivation_hook(__FILE__, 'wprr_deactivate_plugin');
+
+/**
+ * Fired when uninstall the plugin.
+ *
+ * Delete options and optimize the database.
+ *
+ * @since WP Rich Recipes 1.4
+ *
+ * @global object $wpdb
+ */
+function wprr_uninstall_plugin()
+{
+    /* Global */
+    global $wpdb;
+
+    /* Remove settings */
+    delete_option('wprr_flush_rewrite_rules_flag');
+}
+
+register_uninstall_hook(__FILE__, 'wprr_uninstall_plugin');
